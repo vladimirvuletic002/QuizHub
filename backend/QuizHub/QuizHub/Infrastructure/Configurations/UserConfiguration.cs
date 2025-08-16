@@ -16,7 +16,12 @@ namespace QuizHub.Infrastructure.Configurations
 
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
-            builder.Property(x => x.Username).HasMaxLength(30);
+            builder.HasIndex(u => u.Username).IsUnique();
+            builder.HasIndex(u => u.Email).IsUnique();
+
+            builder.Property(x => x.Username).HasMaxLength(30).IsRequired();
+            builder.Property(x => x.Email).HasMaxLength(255).IsRequired();
+            builder.Property(x => x.Password).IsRequired();
         }
     }
 }

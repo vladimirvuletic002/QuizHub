@@ -1,0 +1,171 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --radius-2: 6px;
+  --radius-3: 8px;
+  --shadow-1: 0 4px 10px rgba(0,0,0,0.08);
+  --primary: #6963d4;
+  --accent: #124eb6;
+}
+
+body {
+  margin: 0;
+  font-family:
+    SF Pro Display,
+    "Gill Sans",
+    "Gill Sans MT",
+    Calibri,
+    "Trebuchet MS",
+    sans-serif;
+  font-weight: 600;
+  
+}
+
+/* KONTEJNER: skini min-width blokadu, koristi fluidni padding */
+.auth-container {
+  width: 100%;
+  min-height: calc(100svh - 70px); /* svh rešava mobilni URL bar */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(12px, 4vw, 32px);
+}
+
+/* FORMA: mobile-first, 1 kolona; na većim ekranima prelazi u grid 2 kolone */
+.auth-form {
+  width: min(100%, 520px);
+  background: #fff;
+  border-radius: var(--radius-3);
+  box-shadow: var(--shadow-1);
+  padding: clamp(18px, 4vw, 30px);
+
+  display: grid;
+  grid-template-columns: 1fr; /* mobilni: 1 kolona */
+  row-gap: var(--space-4);
+}
+
+.auth-form h2 {
+  margin: 0 0 var(--space-2);
+  font-size: clamp(20px, 2.5vw, 26px);
+}
+
+.auth-error {
+  color: #b00020;
+  background: #ffe7ea;
+  padding: var(--space-3);
+  border-radius: var(--radius-2);
+}
+
+/* REDOVI FORME */
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.auth-form label {
+  font-size: 0.95rem;
+}
+
+.auth-form input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid rgba(0,0,0,0.35);
+  border-radius: var(--radius-2);
+  font-size: 16px;
+  outline: none;
+}
+
+.auth-form input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(105, 99, 212, 0.15);
+}
+
+/* PREVIEW SLIKE — po defaultu ispod forme na mobilnom */
+.image-preview {
+  margin-top: var(--space-2);
+}
+
+.image-preview img {
+  display: block;
+  width: 50%;
+  max-width: 50px;
+  border-radius: var(--radius-2); 
+}
+
+/* DUGME */
+.auth-submit {
+  padding: 12px 16px;
+  border: none;
+  border-radius: var(--radius-2);
+  cursor: pointer;
+  background: var(--accent);
+  color: #fff;
+  font-size: 16px;
+}
+
+.auth-submit:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
+/* ====== BREAKPOINTS ====== */
+
+/* Srednji ekrani: malo veći max-width forme */
+@media (min-width: 600px) {
+  .auth-form {
+    width: min(100%, 560px);
+  }
+}
+
+/* Veći ekrani: 2 kolone – polja levo, preview desno */
+@media (min-width: 768px) {
+  .auth-form {
+    width: min(100%, 720px);
+    grid-template-columns: 1fr 1fr;  /* forma | preview */
+    column-gap: var(--space-6);
+  }
+
+  /* Naslov, error i dugme neka zauzmu obe kolone */
+  .auth-form h2,
+  .auth-error,
+  .auth-submit {
+    grid-column: 1 / -1;
+  }
+
+
+  .image-preview img {
+    max-width: 50px;
+  }
+}
+
+/* Mali telefoni: dodatno zbij polja/padding */
+@media (max-width: 380px) {
+  .auth-form {
+    padding: 16px;
+  }
+  .auth-form input {
+    padding: 10px;
+  }
+  .auth-submit {
+    width: 100%;
+  }
+}
+
+/* Respect “reduced motion” preferencu */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

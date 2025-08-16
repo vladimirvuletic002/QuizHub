@@ -1,0 +1,6 @@
+.Home-container {
+    display: flex;
+    justify-content: centre;
+    align-items: centre;
+    height: 100vh;
+}

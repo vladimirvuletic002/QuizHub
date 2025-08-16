@@ -11,8 +11,8 @@ using QuizHub.Infrastructure;
 namespace QuizHub.Migrations
 {
     [DbContext(typeof(QuizDbContext))]
-    [Migration("20250814224122_TestMigration")]
-    partial class TestMigration
+    [Migration("20250816012702_Users")]
+    partial class Users
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,7 +34,8 @@ namespace QuizHub.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -52,6 +53,12 @@ namespace QuizHub.Migrations
                         .HasColumnType("nvarchar(30)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("Username")
+                        .IsUnique();
 
                     b.ToTable("Users");
                 });

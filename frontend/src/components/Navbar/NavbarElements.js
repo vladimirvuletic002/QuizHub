@@ -7,6 +7,7 @@ export const Nav = styled.nav`
     height: 70px;
     display: flex;
     position: sticky;
+    
     top: 0;
     justify-content: space-between;
     /*padding: 0.2rem calc((100vw - 1000px) / 2); */
@@ -115,6 +116,87 @@ export const NavBtnLink = styled(Link)`
     }
 `;
 
+//kada se korisnik uloguje
+export const UserMenu = styled.div`
+  display: flex;
+  position: relative;
+  align-items: center;
+  margin-left: auto; /* gura ka desnoj ivici ako treba */
+
+  @media (max-width: 450px) {
+    display: none;
+  }
+`;
+
+export const UserButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.35);
+  padding: 8px 12px;
+  border-radius: 9999px;
+  cursor: pointer;
+`;
+
+export const Avatar = styled.div`
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+`;
+
+export const Username = styled.span`
+  max-width: 160px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+export const UserDropdown = styled.div`
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  min-width: 200px;
+  background: #fff;
+  color: #111;
+  border-radius: 10px;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.18);
+  padding: 8px;
+  z-index: 20;
+
+  visibility: ${({ $open }) => ($open ? "visible" : "hidden")};
+  opacity: ${({ $open }) => ($open ? 1 : 0)};
+  transform: translateY(${({ $open }) => ($open ? "0" : "-6px")});
+  transition: opacity .15s ease, transform .15s ease, visibility .15s ease;
+`;
+
+export const DropItem = styled(Link)`
+  display: block;
+  padding: 10px 12px;
+  color: #111;
+  text-decoration: none;
+  border-radius: 8px;
+  &:hover { background: #f3f4f6; }
+`;
+
+export const DropButton = styled.button`
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 10px 12px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  &:hover { background: #f3f4f6; }
+`;
+
+//za responsive
 export const MobileMenu = styled.div`
   position: fixed;
   top: 70px;         /* ispod navbara */
@@ -150,6 +232,8 @@ export const MobileMenu = styled.div`
   @media screen and (max-width: 450px) {
     display: block;
   }
+
+  
 `;
 
 export const MobileLink = styled(Link)`

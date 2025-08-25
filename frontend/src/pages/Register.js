@@ -63,7 +63,7 @@ function Register({ registerFn = RegisterService }) {
       setSubmitting(true);
       const { data } = await registerFn(fd); // AuthResponse
       //localStorage.setItem("auth", JSON.stringify(data));
-      navigate("/");
+      navigate("/login");
     } catch (err) {
       const msg =
         err?.response?.data?.message ||
@@ -119,6 +119,7 @@ function Register({ registerFn = RegisterService }) {
             value={form.password}
             onChange={onChange}
             autoComplete="new-password"
+            minLength={8}
             required
           />
         </div>
@@ -132,6 +133,7 @@ function Register({ registerFn = RegisterService }) {
             value={form.confirmPassword}
             onChange={onChange}
             autoComplete="new-password"
+            minLength={8}
             required
           />
         </div>

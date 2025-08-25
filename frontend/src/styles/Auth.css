@@ -118,6 +118,15 @@ body {
   cursor: default;
 }
 
+.register-question{
+  text-align: center;
+}
+
+.register-link:hover{
+  color: darkblue;
+  cursor: pointer;
+}
+
 /* ====== BREAKPOINTS ====== */
 
 /* Srednji ekrani: malo veći max-width forme */

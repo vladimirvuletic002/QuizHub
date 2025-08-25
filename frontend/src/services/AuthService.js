@@ -5,7 +5,7 @@ export const Register = async(formData)=>
     return await axios.post(`${process.env.REACT_APP_API_URL}/api/Auth/register`, formData);
 }
 
-export const Login = async()=>
+export const Login = async({usernameOrEmail,password})=>
 {
-    return await axios.post(`${process.env.REACT_APP_API_URL}/api/Auth/login`,);
+    return await axios.post(`${process.env.REACT_APP_API_URL}/api/Auth/login`, {usernameOrEmail,password,});
 }

@@ -49,7 +49,7 @@ namespace QuizHub.Services
                 using var ms = new System.IO.MemoryStream();
                 await request.ProfileImage.CopyToAsync(ms);
                 user.ProfileImage = ms.ToArray();
-                //user.ProfileImageContentType = request.ProfileImage.ContentType;
+                user.ProfileImageContentType = request.ProfileImage.ContentType;
             }
             /*else if (!string.IsNullOrWhiteSpace(request.ProfileImageBase64))
             {
@@ -97,11 +97,18 @@ namespace QuizHub.Services
 
             var (token, expires) = _jwt.CreateToken(claims);
 
+            /*string? profileImageBase64 = null;
+            if (user.ProfileImage != null && user.ProfileImage.Length > 0)
+            {
+                profileImageBase64 = $"data:image/png;base64,{Convert.ToBase64String(user.ProfileImage)}";
+            }*/
+
             return new AuthResponse
             {
                 UserId = user.Id,
                 Username = user.Username,
                 Email = user.Email,
+                //ProfileImageBase64 = profileImageBase64,
                 Role = user.UserType.ToString(),
                 Token = token,
                 ExpiresAtUtc = expires

@@ -1,6 +1,31 @@
 .Home-container {
-    display: flex;
-    justify-content: centre;
-    align-items: centre;
-    height: 100vh;
+    width: 50%;
+    min-height: calc(100svh - 70px); /* svh rešava mobilni URL bar */
+    display: block;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(12px, 4vw, 32px);
+}
+
+.home-p{
+    color: rgb(102, 102, 102);
+}
+
+.home-span{
+    font-family: "Kabouter DEMO";
+    font-size: 40px;
+}
+
+.about-span{
+    font-family: "Kabouter DEMO";
+    font-size: 23px;
+}
+
+.about-container {
+    width: 50%;
+    min-height: calc(100svh - 70px); /* svh rešava mobilni URL bar */
+    display: block;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(12px, 4vw, 32px);
 }

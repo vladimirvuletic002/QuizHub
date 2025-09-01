@@ -6,5 +6,7 @@ namespace QuizHub.Interfaces
     {
         List<UserDto> GetUsers();
         UserDto GetUser(long id);
+
+        Task<(byte[] Content, string ContentType)?> GetProfileImage(long id);
     }
 }

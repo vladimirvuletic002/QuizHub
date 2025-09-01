@@ -16,6 +16,18 @@ namespace QuizHub.Services
             _dbContext = dbContext;
         }
 
+        public async Task<(byte[]Content, string ContentType)?>GetProfileImage(long id)
+        {
+            var user = await _dbContext.Users.FindAsync(id);
+            if (user == null || user.ProfileImage == null)
+                return null;
+
+            var contentType = string.IsNullOrEmpty(user.ProfileImageContentType) ? "image/png" : user.ProfileImageContentType;
+            
+
+            return (user.ProfileImage, contentType);
+        }
+
         public UserDto GetUser(long id)
         {
             return _mapper.Map<UserDto>(_dbContext.Users.Find(id));

@@ -17,6 +17,10 @@ namespace QuizHub.Models
         // Skladistenje slike u bazi kao byte[]
         public byte[]? ProfileImage { get; set; }
 
+        public string? ProfileImageContentType { get; set; }
+
         public UserType UserType { get; set; }
+
+        public ICollection<QuizAttempt> Attempts { get; set; } = new List<QuizAttempt>();
     }
 }

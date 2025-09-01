@@ -1,0 +1,114 @@
+.qcreate-wrap {
+  max-width: 960px;
+  margin: 24px auto;
+  padding: 0 16px;
+  font-family: Segoe UI, SF Pro Display, Roboto, sans-serif;
+}
+
+.qcreate-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 16px;
+  margin: 16px 0;
+}
+
+.qcreate-label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-weight: 600;
+  color: #222;
+}
+
+.qcreate-input {
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 14px;
+}
+
+.qcreate-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+}
+
+.qcreate-col-span-2 { grid-column: span 2; }
+
+.qcreate-block { margin-top: 12px; }
+.qcreate-row { display: flex; align-items: center; gap: 8px; margin: 8px 0; }
+.qcreate-radio { display: flex; align-items: center; gap: 6px; }
+.qcreate-muted { color: #6b7280; margin: 6px 0; }
+
+.qcreate-secondary {
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+.qcreate-secondary:hover { background: #eaecef; }
+
+.qcreate-danger {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.qcreate-primary {
+  background: #8882ff;
+  color: #000;
+  border: 0;
+  border-radius: 8px;
+  padding: 10px 14px;
+  cursor: pointer;
+}
+
+.qcreate-ghost {
+  background: transparent;
+  border: 1px dashed #cbd5e1;
+  border-radius: 8px;
+  padding: 10px 14px;
+  cursor: pointer;
+}
+
+.qcreate-summary { color: #374151; margin-top: 8px; }
+
+.qcreate-footer { display: flex; gap: 10px; margin: 16px 0 48px; }
+
+.qcreate-finish {
+  background: #124eb6ff;
+  color: #fff;
+  border: 0;
+  border-radius: 10px;
+  padding: 12px 16px;
+  cursor: pointer;
+}
+.qcreate-finish:disabled { opacity: .6; cursor: not-allowed; }
+
+.qcreate-cancel {
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 12px 16px;
+  cursor: pointer;
+}
+
+.qcreate-error {
+  color: #b00020;
+  background: #ffe7ea;
+  padding: 10px 12px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+@media (max-width: 760px) {
+  .qcreate-grid {
+    grid-template-columns: 1fr;
+  }
+  .qcreate-col-span-2 { grid-column: span 1; }
+}

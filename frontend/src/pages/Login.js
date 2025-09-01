@@ -100,7 +100,7 @@ function Login({ loginFn = LoginService }) {
           {submitting ? "Prijava..." : "Prijavi se"}
         </button>
 
-        <p className='register-question'>Nisi clan? <span className="register-link" onClick={() => navigate("/register")}>Registruj se.</span></p>
+        <p className='register-question'>Nisi član? <span className="register-link" onClick={() => navigate("/register")}>Registruj se.</span></p>
 
       </form>
     </div>

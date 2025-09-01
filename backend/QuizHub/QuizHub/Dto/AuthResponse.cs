@@ -8,5 +8,7 @@
         public string Role { get; set; } = "User";
         public string Token { get; set; } = string.Empty;
         public DateTime ExpiresAtUtc { get; set; }
+
+        //public string ProfileImageBase64 { get; set; } = string.Empty;
     }
 }

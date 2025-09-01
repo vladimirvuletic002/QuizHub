@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
+import React, { useState, useEffect, useRef, useContext, useMemo } from "react";
 //import "../styles/NavBar.css";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import {
@@ -15,12 +15,14 @@ import {
   MobileBtnLink,
 } from "./NavbarElements";
 import { useAuth } from "../../context/AuthContext";
+import { GetProfileImage } from "../../services/UserService";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false); // za MobileMenu (hamburger)
   const location = useLocation();
   const { auth, logout } = useAuth();
   const [userOpen, setUserOpen] = useState(false); // za desktop dropdown
+  const [profileImageUrl, setProfileImageUrl] = useState(null);
   const userRef = useRef(null);
 
   // zatvori dropdown kad se promeni ruta
@@ -42,6 +44,36 @@ const Navbar = () => {
   const username = auth?.Username || auth?.username || auth?.Email || "User";
   const initials = (username?.[0] || "U").toUpperCase();
 
+  // ucitaj profilnu sliku sa servera
+   useEffect(() => {
+    let urlToRevoke = null;
+
+    const fetchImage = async () => {
+      //if (!auth?.UserId || !auth?.userId) { setProfileImageUrl(null); return; }
+      try {
+        const url = await GetProfileImage(auth.userId);
+        urlToRevoke = url;
+        setProfileImageUrl(url);
+        
+      } catch (err) {
+        //console.error("Greška pri učitavanju profilne slike:", err);
+        setProfileImageUrl(null);
+      }
+    };
+
+    fetchImage();
+
+    return () => {
+      if (urlToRevoke) URL.revokeObjectURL(urlToRevoke);
+    };
+  }, [auth?.userId]);
+
+  const isAdmin = useMemo(() => {
+    const role = (auth?.Role || auth?.role || "").toString().toLowerCase();
+    return role === "administrator"; // 0 = Admin, 1 = User
+  }, [auth]);
+
+
   return (
     <>
       <Nav>
@@ -57,9 +89,9 @@ const Navbar = () => {
         </NavLogo>
 
         <NavMenu>
-          <NavLink to="/">Home</NavLink>
+          <NavLink to="/">Početna</NavLink>
 
-          <NavLink to="/about">About</NavLink>
+          <NavLink to="/about">O Nama</NavLink>
 
           {/* Second Nav */}
           {/* <NavBtnLink to='/sign-in'>Sign In</NavBtnLink> */}
@@ -67,7 +99,7 @@ const Navbar = () => {
 
         {!auth ? (
           <NavBtn>
-            <NavBtnLink to="/login">Sign In</NavBtnLink>
+            <NavBtnLink to="/login">Prijava</NavBtnLink>
           </NavBtn>
         ) : (
           <UserMenu ref={userRef}>
@@ -75,14 +107,28 @@ const Navbar = () => {
               onClick={() => setUserOpen((v) => !v)}
               aria-expanded={userOpen}
             >
-              <Avatar>{initials}</Avatar>
+              <Avatar>
+                {profileImageUrl ? (
+                  <img src={profileImageUrl} alt="profile" />
+                ) : (
+                  initials
+                )}
+              </Avatar>
               <Username>{username}</Username>
             </UserButton>
 
+
+
             <UserDropdown $open={userOpen}>
-              <DropItem to="/profile">Profil</DropItem>
-              <DropItem to="/quizzes">Moji kvizovi</DropItem>
-              <DropItem to="/quizzes/create">Kreiraj kviz</DropItem>
+              
+
+              {!isAdmin ? (
+                  <><DropItem to="/quizzes">Moji Kvizovi</DropItem><DropItem to="/user-attempt-history">Moji Rezultati</DropItem></>
+              ) : (
+
+                  <><DropItem to="/QuizManager">Kvizovi</DropItem><DropItem to="/attempt-history">Evidencija</DropItem></>
+              )}
+
               <DropButton
                 onClick={() => {
                   logout();
@@ -97,18 +143,25 @@ const Navbar = () => {
 
       {typeof MobileMenu !== "undefined" && (
         <MobileMenu $open={open}>
-          <MobileLink to="/">Home</MobileLink>
-          <MobileLink to="/about">About</MobileLink>
+          <MobileLink to="/">Početna</MobileLink>
+          <MobileLink to="/about">O nama</MobileLink>
 
           {!auth ? (
             <>
-              <MobileLink to="/login">Sign In</MobileLink>
+              <MobileLink to="/login">Prijava</MobileLink>
             </>
           ) : (
             <>
-              <MobileLink to="/profile">Profil</MobileLink>
-              <MobileLink to="/quizzes">Moji kvizovi</MobileLink>
-              <MobileLink to="/quizzes/create">Kreiraj kviz</MobileLink>
+
+              {!isAdmin ? (
+                  <><MobileLink to="/quizzes">Moji Kvizovi</MobileLink><MobileLink to="/user-attempt-history">Moji Rezultati</MobileLink></>
+              ) : (
+
+                  <><MobileLink to="/QuizManager">Kvizovi</MobileLink><MobileLink to="/attempt-history">Evidencija</MobileLink></>
+              )}
+              
+
+
               <MobileBtnLink as={Link} to="/" onClick={() => logout()}>
                 Odjavi se
               </MobileBtnLink>

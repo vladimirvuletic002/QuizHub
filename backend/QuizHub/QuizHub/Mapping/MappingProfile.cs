@@ -10,6 +10,12 @@ namespace QuizHub.Mapping
         {
             CreateMap<User, RegisterDto>().ForMember(d => d.Password, o => o.Ignore())
             .ForMember(d => d.ProfileImage, o => o.Ignore()).ReverseMap();
+
+            CreateMap<User, UserDto>().ReverseMap();
+
+            CreateMap<Quiz, QuizDto>().ReverseMap();
+
+            CreateMap<Category, CategoryNameDto>().ReverseMap();
         }
     }
 }

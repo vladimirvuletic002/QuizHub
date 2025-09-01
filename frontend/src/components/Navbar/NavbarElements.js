@@ -74,6 +74,7 @@ export const NavMenu = styled.div`
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    white-space: nowrap;
     
     /* Second Nav */
     /* margin-right: 24px; */
@@ -133,6 +134,8 @@ export const UserButton = styled.button`
   align-items: center;
   gap: 8px;
   background: transparent;
+  font-family: "Segoe UI", SF Pro Display, Calibri;
+  font-weight: 500;
   color: #fff;
   border: 1px solid rgba(255,255,255,0.35);
   padding: 8px 12px;
@@ -148,6 +151,14 @@ export const Avatar = styled.div`
   display: grid;
   place-items: center;
   font-weight: 700;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;        
+    display: block;
+  }
 `;
 
 export const Username = styled.span`

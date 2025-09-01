@@ -10,6 +10,14 @@ namespace QuizHub.Infrastructure
     public class QuizDbContext : DbContext
     {
         public DbSet<User> Users { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Quiz> Quizzes { get; set; }
+        public DbSet<Question> Questions { get; set; }
+        public DbSet<QuestionOption> QuestionOptions { get; set; }
+        public DbSet<QuestionAcceptableAnswer> QuestionAcceptableAnswers { get; set; }
+        public DbSet<QuizAttempt> QuizAttempts { get; set; }
+        public DbSet<AttemptAnswer> AttemptAnswers { get; set; }
+        public DbSet<AttemptAnswerOption> AttemptAnswerOptions { get; set; } 
         public QuizDbContext(DbContextOptions<QuizDbContext> options) : base(options)
         {
         }

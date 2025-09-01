@@ -1,6 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { GetAllQuizzes as GetAllQuizzesService, DeleteQuiz as DeleteQuizService } from "../services/QuizService";
+import {
+  GetAllQuizzes as GetAllQuizzesService,
+  DeleteQuiz as DeleteQuizService,
+} from "../services/QuizService";
 import { useAuth } from "../context/AuthContext";
 import "../styles/QuizManager.css";
 
@@ -36,12 +39,14 @@ export default function QuizManager({
   const [err, setErr] = useState("");
 
   useEffect(() => {
-    if (!isAdmin) return;
+    if (!auth) return;
     const load = async () => {
       try {
         setLoading(true);
         const { data } = await getAllFn();
-        const list = Array.isArray(data) ? data : (data.items ?? data.Items ?? []);
+        const list = Array.isArray(data)
+          ? data
+          : data.items ?? data.Items ?? [];
         setRows(list);
       } catch (e) {
         const msg =
@@ -54,9 +59,9 @@ export default function QuizManager({
       }
     };
     load();
-  }, [isAdmin, getAllFn]);
+  }, [auth, getAllFn]);
 
-  if (!isAdmin) {
+  /*if (!isAdmin) {
     return (
       <div className="adminqz-wrap">
         <div className="adminqz-card">
@@ -66,10 +71,12 @@ export default function QuizManager({
         </div>
       </div>
     );
-  }
+  } */
 
   const onDelete = async (id, title) => {
-    const yes = window.confirm(`Obrisati kviz "${title}"? Ova radnja je trajna.`);
+    const yes = window.confirm(
+      `Obrisati kviz "${title}"? Ova radnja je trajna.`
+    );
     if (!yes) return;
     try {
       await deleteFn(id);
@@ -87,9 +94,16 @@ export default function QuizManager({
     <div className="adminqz-wrap">
       <div className="adminqz-header">
         <h1>Upravljanje kvizovima</h1>
-        <button className="adminqz-create" onClick={() => navigate("/QuizManager/CreateQuiz")}>
-          + Dodaj novi kviz
-        </button>
+
+        { isAdmin && (
+          <button
+            className="adminqz-create"
+            onClick={() => navigate("/QuizManager/CreateQuiz")}
+          >
+            + Dodaj novi kviz
+          </button>
+        )}
+          
       </div>
 
       {err && <div className="adminqz-error">{err}</div>}
@@ -112,24 +126,32 @@ export default function QuizManager({
             rows.map((q) => (
               <div key={q.id} className="adminqz-row">
                 <div className="adminqz-title">
-                  <Link to={`/QuizManager/${q.id}/EditQuiz`}>{q.title}</Link>
+                  {q.title}
                 </div>
                 <div>{q.categoryName}</div>
                 <div>{difficultyLabel(q.difficulty)}</div>
                 <div>{formatSeconds(q.timeLimitSeconds)}</div>
                 <div className="adminqz-actions">
-                  <button
-                    className="adminqz-edit"
-                    onClick={() => navigate(`/QuizManager/${q.id}/EditQuiz`)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="adminqz-delete"
-                    onClick={() => onDelete(q.id, q.title)}
-                  >
-                    Delete
-                  </button>
+                  {!isAdmin ? (
+                    <button className="adminqz-take-quiz"> Reši Kviz</button>
+                  ) : (
+                    <>
+                      <button
+                        className="adminqz-edit"
+                        onClick={() =>
+                          navigate(`/QuizManager/${q.id}/EditQuiz`)
+                        }
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="adminqz-delete"
+                        onClick={() => onDelete(q.id, q.title)}
+                      >
+                        Delete
+                      </button>
+                    </>
+                  )}
                 </div>
               </div>
             ))

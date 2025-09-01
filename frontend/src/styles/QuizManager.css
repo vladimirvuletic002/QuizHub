@@ -2,7 +2,7 @@
   max-width: 1000px;
   margin: 24px auto;
   padding: 0 16px;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-family: Segoe UI, Roboto, SF Pro Display, sans-serif;
 }
 
 .adminqz-header {
@@ -20,6 +20,7 @@
   border-radius: 8px;
   padding: 10px 14px;
   cursor: pointer;
+  font-family: Segoe UI, SF Pro Display, Roboto;
 }
 
 .adminqz-create:hover { opacity: .92; }
@@ -72,11 +73,30 @@
 
 .adminqz-edit {
   background: #8882ff;
-  color: #000;
+  color: white;
   border: 0;
   border-radius: 6px;
   padding: 8px 12px;
   cursor: pointer;
+  font-family: Segoe UI, SF Pro Display, Roboto;
+}
+
+.adminqz-edit:hover{
+    background: #534fa4;
+}
+
+.adminqz-take-quiz {
+  background: #00c97c;
+  color: white;
+  border: 0;
+  border-radius: 6px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-family: Segoe UI, SF Pro Display, Roboto;
+}
+
+.adminqz-take-quiz:hover{
+    background: #007c4d;
 }
 
 .adminqz-delete {
@@ -86,6 +106,11 @@
   border-radius: 6px;
   padding: 8px 12px;
   cursor: pointer;
+  font-family: Segoe UI, SF Pro Display, Roboto;
+}
+
+.adminqz-delete:hover{
+    background: #a02a2a;
 }
 
 .adminqz-title a {

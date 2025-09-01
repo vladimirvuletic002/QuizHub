@@ -15,6 +15,7 @@ import Navbar from "./components/Navbar";
 import About from "./pages/about";
 import QuizManager from "./pages/QuizManager";
 import CreateQuizPage from "./pages/CreateQuizPage";
+import EditQuizPage from "./pages/QuizEditPage";
 import { AuthProvider } from "./context/AuthContext";
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
           <Route path="/About" element={<About />} />
           <Route path="/QuizManager" element={<QuizManager />} />
           <Route path="/QuizManager/CreateQuiz" element={<CreateQuizPage/>} />
+          <Route path="/QuizManager/:id/EditQuiz/" element={<EditQuizPage/>} />
 
         </Routes>
       </Router>

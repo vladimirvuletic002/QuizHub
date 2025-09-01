@@ -12,9 +12,7 @@ function authHeaders() {
 }
 
 export const GetAllQuizzes = async () => {
-  return await axios.get(`${process.env.REACT_APP_API_URL}/api/Quiz/get-all-quizzes`, {
-    headers: { ...authHeaders() }
-  });
+  return await axios.get(`${process.env.REACT_APP_API_URL}/api/Quiz/get-all-quizzes`);
 };
 
 export const DeleteQuiz = async (id) => {
@@ -29,4 +27,7 @@ export const CreateQuiz = async (dto) =>
     headers: { "Content-Type": "application/json", ...authHeaders() }
   });
 export const UpdateQuiz = async (id, dto) => axios.put(`${process.env.REACT_APP_API_URL}/api/Quiz/update/${id}`, dto, { headers: { 'Content-Type':'application/json', ...authHeaders() }});
-// export const GetQuizById = async (id) => axios.get(`${API}/api/Quizzes/${id}`, { headers: { ...authHeaders() }});
+
+export const GetQuizById = async (id) => {
+  return await axios.get(`${process.env.REACT_APP_API_URL}/api/Quiz/${id}`, { headers: { ...authHeaders() }});
+};

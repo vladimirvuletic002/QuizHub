@@ -31,6 +31,10 @@ body {
   
 }
 
+input{
+  font-family: Segoe UI, SF Pro Display, Roboto;
+}
+
 /* KONTEJNER: skini min-width blokadu, koristi fluidni padding */
 .auth-container {
   width: 100%;

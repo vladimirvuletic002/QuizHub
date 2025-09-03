@@ -16,6 +16,8 @@ import About from "./pages/about";
 import QuizManager from "./pages/QuizManager";
 import CreateQuizPage from "./pages/CreateQuizPage";
 import EditQuizPage from "./pages/QuizEditPage";
+import QuizSolvingPage from "./pages/QuizSolvingPage";
+import MyAttemptsPage from "./pages/MyAttemptsPage";
 import { AuthProvider } from "./context/AuthContext";
 
 function App() {
@@ -32,6 +34,8 @@ function App() {
           <Route path="/QuizManager" element={<QuizManager />} />
           <Route path="/QuizManager/CreateQuiz" element={<CreateQuizPage/>} />
           <Route path="/QuizManager/:id/EditQuiz/" element={<EditQuizPage/>} />
+          <Route path="/QuizManager/:id/QuizSolving/" element={<QuizSolvingPage/>} />
+          <Route path="/MyAttempts" element={<MyAttemptsPage/>} />
 
         </Routes>
       </Router>

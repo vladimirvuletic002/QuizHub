@@ -123,13 +123,13 @@ const Navbar = () => {
               
 
               {!isAdmin ? (
-                  <><DropItem to="/QuizManager">Moji Kvizovi</DropItem><DropItem to="/user-attempt-history">Moji Rezultati</DropItem></>
+                  <><DropItem to="/QuizManager">Moji Kvizovi</DropItem><DropItem to="/MyAttempts">Moji Rezultati</DropItem></>
               ) : (
 
                   <><DropItem to="/QuizManager">Kvizovi</DropItem><DropItem to="/attempt-history">Evidencija</DropItem></>
               )}
 
-              <DropButton
+              <DropButton as={Link} to="/"
                 onClick={() => {
                   logout();
                 }}
@@ -154,7 +154,7 @@ const Navbar = () => {
             <>
 
               {!isAdmin ? (
-                  <><MobileLink to="/QuizManager">Moji Kvizovi</MobileLink><MobileLink to="/user-attempt-history">Moji Rezultati</MobileLink></>
+                  <><MobileLink to="/QuizManager">Moji Kvizovi</MobileLink><MobileLink to="/MyAttempts">Moji Rezultati</MobileLink></>
               ) : (
 
                   <><MobileLink to="/QuizManager">Kvizovi</MobileLink><MobileLink to="/attempt-history">Evidencija</MobileLink></>

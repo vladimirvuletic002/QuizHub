@@ -284,5 +284,173 @@ namespace QuizHub.Services
             return _mapper.Map<List<QuizDto>>(_db.Quizzes.ToList());
         }
 
+        public async Task<QuizSubmitResultDto> SubmitQuizAsync(long quizId, long userId, SubmitQuizDto submission)
+        {
+            var quiz = await _db.Quizzes
+                .Include(q => q.Questions).ThenInclude(x => x.Options)
+                .Include(q => q.Questions).ThenInclude(x => x.AcceptableAnswers)
+                .FirstOrDefaultAsync(q => q.Id == quizId);
+
+            if (quiz == null)
+                throw new KeyNotFoundException("Quiz not found.");
+
+            
+            var byQuestionId = quiz.Questions.ToDictionary(x => x.Id, x => x);
+
+            int totalScore = 0;
+            int maxScore = 0;
+            var perQuestion = new List<QuestionResultDto>();
+
+            string Norm(string? s) => (s ?? string.Empty).Trim().ToLowerInvariant();
+
+            var attempt = new QuizAttempt
+            {
+                QuizId = quiz.Id,
+                UserId = userId,
+                StartedAtUtc = submission.StartedAtUtc ?? DateTime.UtcNow,
+                CompletedAtUtc = DateTime.UtcNow
+            };
+
+            foreach (var q in quiz.Questions.OrderBy(x => x.Order))
+            {
+                maxScore += q.Points;
+
+                var sub = submission.Answers
+                    .FirstOrDefault(a => a.QuestionId.HasValue && a.QuestionId.Value == q.Id);
+
+                bool correct = false;
+                int awarded = 0;
+
+                var attemptAnswer = new AttemptAnswer
+                {
+                    QuestionId = q.Id
+                };
+
+                if (sub != null)
+                {
+                    switch (q.Type)
+                    {
+                        case QuestionType.SingleChoice:
+                            {
+                                // očekuje se jedan ID tačne opcije
+                                if (sub.SelectedOptionId.HasValue)
+                                {
+                                    var chosen = q.Options.FirstOrDefault(o => o.Id == sub.SelectedOptionId.Value);
+
+                                    if(chosen != null)
+                                    {
+                                        attemptAnswer.SelectedOptions.Add(new AttemptAnswerOption
+                                        {
+                                            QuestionOptionId = chosen.Id
+                                        });
+                                        correct = chosen?.IsCorrect == true;
+                                    }
+                                    
+                                }
+                                break;
+                            }
+
+                        case QuestionType.MultipleChoice:
+                            {
+                                // očekuje se lista ID-jeva
+                                var correctIds = new HashSet<long>(q.Options.Where(o => o.IsCorrect).Select(o => o.Id));
+                                var chosenIds = new HashSet<long>(sub.SelectedOptionIds ?? Enumerable.Empty<long>());
+
+                                foreach (var optId in chosenIds)
+                                {
+                                    // validacija postojanja opcije
+                                    if (q.Options.Any(o => o.Id == optId))
+                                    {
+                                        attemptAnswer.SelectedOptions.Add(new AttemptAnswerOption
+                                        {
+                                            QuestionOptionId = optId
+                                        });
+                                    }
+                                }
+
+                                // tačno ako su skupovi identični
+                                correct = correctIds.SetEquals(chosenIds);
+                                break;
+                            }
+
+                        case QuestionType.TrueFalse:
+                            {
+                                // očekuje se bool
+                                if (sub.TrueFalseAnswer.HasValue)
+                                {
+                                    // pronađi koja je TF opcija tačna: pretpostavka — imaš dve opcije, jedna IsCorrect = true
+                                    // (nije nužno da proveravaš tekst; dovoljno je da znaš koja je tačna)
+                                    var trueOption = q.Options.FirstOrDefault(o =>
+                                        o.Text.Equals("Tačno", StringComparison.OrdinalIgnoreCase) ||
+                                        o.Text.Equals("Tacno", StringComparison.OrdinalIgnoreCase));
+                                    var falseOption = q.Options.FirstOrDefault(o =>
+                                        o.Text.Equals("Netačno", StringComparison.OrdinalIgnoreCase) ||
+                                        o.Text.Equals("Netacno", StringComparison.OrdinalIgnoreCase));
+
+                                    // ako nema eksplicitnog teksta, fallback: tačna je ona sa IsCorrect = true
+                                    bool isTrueCorrect =
+                                        (trueOption?.IsCorrect == true) ||
+                                        (trueOption == null && falseOption == null && q.Options.Any(o => o.IsCorrect));
+
+                                    // upisi i izabranu opciju (po tekstu ili logici)
+                                    var picked = sub.TrueFalseAnswer.Value ? trueOption : falseOption;
+                                    if (picked != null)
+                                    {
+                                        attemptAnswer.SelectedOptions.Add(new AttemptAnswerOption
+                                        {
+                                            QuestionOptionId = picked.Id
+                                        });
+                                    }
+
+                                    correct = sub.TrueFalseAnswer.Value == isTrueCorrect;
+                                }
+                                break;
+                            }
+
+                        case QuestionType.TextInput:
+                            {
+                                var acceptable = q.AcceptableAnswers.Select(a => Norm(a.AnswerText)).ToHashSet();
+                                var userText = sub.TextAnswer ?? "";
+                                attemptAnswer.TextAnswer = userText;
+                                correct = acceptable.Contains(Norm(sub.TextAnswer));
+                                break;
+                            }
+                    }
+                }
+
+                if (correct)
+                    awarded = q.Points;
+
+                attemptAnswer.IsCorrect = correct;
+                attemptAnswer.AwardedPoints = awarded;
+                attempt.Answers.Add(attemptAnswer);
+
+                totalScore += awarded;
+
+                perQuestion.Add(new QuestionResultDto
+                {
+                    QuestionId = q.Id,
+                    Order = q.Order,
+                    Points = q.Points,
+                    Correct = correct
+                });
+            }
+
+            attempt.Score = totalScore;
+            attempt.MaxScore = maxScore;
+
+            // 3) Snimi u bazu
+            _db.QuizAttempts.Add(attempt);
+            await _db.SaveChangesAsync();
+
+            return new QuizSubmitResultDto
+            {
+                QuizId = quiz.Id,
+                UserId = userId,
+                Score = totalScore,
+                MaxScore = maxScore,
+                Questions = perQuestion
+            };
+        }
     }
 }

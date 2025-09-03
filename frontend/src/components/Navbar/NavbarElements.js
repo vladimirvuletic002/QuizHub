@@ -199,6 +199,8 @@ export const DropButton = styled.button`
   display: block;
   width: 100%;
   text-align: left;
+  text-decoration: none;
+  color: red;
   padding: 10px 12px;
   background: transparent;
   border: none;

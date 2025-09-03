@@ -1,0 +1,33 @@
+.qs-wrap { max-width: 800px; margin: 24px auto; padding: 0 16px; }
+.qs-header { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.qs-meta { display: flex; gap: 16px; font-size: 14px; opacity: .8; }
+
+.qs-card { margin-top: 16px; border-radius: 10px; box-shadow: 0 6px 16px rgba(0,0,0,.08); padding: 16px; background: #fff; }
+.qs-qhead { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; color: #444; }
+.qs-qtext { margin: 8px 0 12px; }
+.qs-block { display: grid; gap: 10px; }
+.qs-option { display: flex; gap: 10px; align-items: center; padding: 8px 10px; border: 1px solid #eee; border-radius: 8px; }
+.qs-input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd; }
+
+.qs-actions { display: flex; justify-content: space-between; margin-top: 16px; gap: 8px; }
+.qs-primary, .qs-ghost, .qs-finish { padding: 10px 16px; border-radius: 8px; border: none; cursor: pointer; }
+.qs-primary { background: #124eb6; color: #fff; }
+.qs-ghost { background: #f3f4f6; }
+.qs-finish { background: #6963d4; color: #fff; }
+
+.qs-error { color: #b00020; background: #ffe7ea; padding: 12px; border-radius: 8px; }
+
+.qs-big { font-size: 32px; font-weight: 700; }
+
+.qs-review-list { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 12px; }
+.qs-review-item { border: 1px solid #eee; border-radius: 10px; padding: 12px; }
+.qs-review-item.right { border-color: #18a55833; background: #18a5580a; }
+.qs-review-item.wrong { border-color: #d11a2a33; background: #d11a2a0a; }
+.qs-review-head { font-size: 14px; color: #555; }
+.qs-review-points { opacity: .75; margin-left: 6px; }
+.qs-review-text { margin: 6px 0 10px; font-weight: 600; }
+.qs-review-row { display: flex; align-items: center; gap: 10px; margin: 6px 0; }
+.qs-tag { font-size: 12px; color: #666; min-width: 90px; }
+.qs-chipset { display: flex; flex-wrap: wrap; gap: 6px; }
+.qs-chip { background: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 999px; padding: 4px 10px; font-size: 13px; }
+.qs-chip-correct { background: #e6f9ef; border-color: #c6f1dc; }

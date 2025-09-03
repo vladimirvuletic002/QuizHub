@@ -93,16 +93,17 @@ export default function QuizManager({
   return (
     <div className="adminqz-wrap">
       <div className="adminqz-header">
-        <h1>Upravljanje kvizovima</h1>
+        
 
-        { isAdmin && (
+        { isAdmin ? (
+          <><h1>Upravljanje kvizovima</h1>
           <button
             className="adminqz-create"
             onClick={() => navigate("/QuizManager/CreateQuiz")}
           >
             + Dodaj novi kviz
-          </button>
-        )}
+          </button></>
+        ) : (<h1>Dostupni Kvizovi</h1>)}
           
       </div>
 
@@ -133,7 +134,8 @@ export default function QuizManager({
                 <div>{formatSeconds(q.timeLimitSeconds)}</div>
                 <div className="adminqz-actions">
                   {!isAdmin ? (
-                    <button className="adminqz-take-quiz"> Reši Kviz</button>
+                    <button className="adminqz-take-quiz" onClick={() =>
+                          navigate(`/QuizManager/${q.id}/QuizSolving`)}> Reši Kviz</button>
                   ) : (
                     <>
                       <button

@@ -15,5 +15,7 @@ namespace QuizHub.Interfaces
         Task<PagedResult<QuizListItemDto>> GetAllQuizzesAsync();
 
         Task<List<QuizDto>> GetQuizzes();
+
+        Task<QuizSubmitResultDto> SubmitQuizAsync(long quizId, long userId, SubmitQuizDto submission);
     }
 }

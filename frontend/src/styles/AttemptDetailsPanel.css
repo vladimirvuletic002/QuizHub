@@ -1,0 +1,32 @@
+.adp-wrap { margin-top: 8px; }
+.adp-toggle {
+  background: #e5e7eb; border: 0; border-radius: 8px; padding: 6px 10px; cursor: pointer;
+}
+.adp-panel { margin-top: 10px; background: #fff; border-radius: 12px; box-shadow: 0 6px 24px rgba(0,0,0,.06); padding: 14px; }
+.adp-loading { padding: 10px; }
+.adp-error { color: #b00020; background: #ffe7ea; padding: 10px; border-radius: 8px; }
+
+.adp-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.adp-sub { color: #555; font-size: 14px; margin-top: 2px; }
+.adp-score { text-align: right; }
+.adp-big { font-weight: 800; font-size: 20px; display:block; }
+.adp-pct { color: #4f46e5; font-weight:700; }
+
+.adp-chart { margin: 8px 0 12px; color: #9ca3af; }
+
+.adp-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+.adp-item { border: 1px solid #eef; border-radius: 10px; padding: 10px; }
+.adp-item.ok { border-color: #16a34a22; background: #16a34a0a; }
+.adp-item.bad { border-color: #dc262622; background: #dc26260a; }
+
+.adp-qhead { display: flex; gap: 10px; align-items: center; }
+.adp-badge { border-radius: 9999px; padding: 3px 8px; font-size: 12px; }
+.adp-badge.ok { background: #dcfce7; color: #166534; }
+.adp-badge.bad { background: #fee2e2; color: #991b1b; }
+
+.adp-qtext { font-weight: 600; margin: 6px 0 4px; }
+.adp-row { display: flex; gap: 8px; align-items: flex-start; margin-top: 4px; }
+.adp-tag { color: #555; min-width: 110px; display: inline-block; }
+.adp-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.adp-chip { background: #eef2ff; color: #111; padding: 4px 8px; border-radius: 9999px; font-size: 12px; }
+.adp-chip.ok { background: #dcfce7; }

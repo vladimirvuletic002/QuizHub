@@ -12,11 +12,11 @@ function authHeaders() {
 }
 
 export const GetAllQuizzes = async () => {
-  return await axios.get(`${process.env.REACT_APP_API_URL}/api/Quiz/get-all-quizzes`);
+  return await axios.get(`${process.env.REACT_APP_API_URL}/api/Quiz/quizzes`);
 };
 
 export const DeleteQuiz = async (id) => {
-  return await axios.delete(`${process.env.REACT_APP_API_URL}/api/Quiz/delete/${id}`, {
+  return await axios.delete(`${process.env.REACT_APP_API_URL}/api/Quiz/${id}/delete`, {
     headers: { ...authHeaders() },
   });
 };
@@ -26,8 +26,13 @@ export const CreateQuiz = async (dto) =>
   axios.post(`${process.env.REACT_APP_API_URL}/api/Quiz/create`, dto, {
     headers: { "Content-Type": "application/json", ...authHeaders() }
   });
-export const UpdateQuiz = async (id, dto) => axios.put(`${process.env.REACT_APP_API_URL}/api/Quiz/update/${id}`, dto, { headers: { 'Content-Type':'application/json', ...authHeaders() }});
+export const UpdateQuiz = async (id, dto) => axios.put(`${process.env.REACT_APP_API_URL}/api/Quiz/${id}/update`, dto, { headers: { 'Content-Type':'application/json', ...authHeaders() }});
 
 export const GetQuizById = async (id) => {
   return await axios.get(`${process.env.REACT_APP_API_URL}/api/Quiz/${id}`, { headers: { ...authHeaders() }});
 };
+
+export const SubmitQuiz = async (id, dto) =>
+  axios.post(`${process.env.REACT_APP_API_URL}/api/Quiz/${id}/submit`, dto, {
+    headers: { "Content-Type": "application/json", ...authHeaders() },
+  });

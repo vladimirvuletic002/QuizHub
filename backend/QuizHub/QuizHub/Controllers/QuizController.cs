@@ -38,7 +38,7 @@ namespace QuizHub.Controllers
         }
 
         // UPDATE (PUT) — admin
-        [HttpPut("update/{id:long}")]
+        [HttpPut("{id:long}/update")]
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Update(long id, [FromBody] UpdateQuizDto dto)
         {
@@ -57,7 +57,7 @@ namespace QuizHub.Controllers
         }
 
         // DELETE — admin
-        [HttpDelete("delete/{id:long}")]
+        [HttpDelete("{id:long}/delete")]
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(long id)
         {
@@ -75,11 +75,20 @@ namespace QuizHub.Controllers
             return Ok(res);
         }
 
-        [HttpGet("get-all-quizzes")]
+        [HttpGet("quizzes")]
         public async Task<IActionResult> GetAllQuizzes()
         {
             var list = await _quizService.GetAllQuizzesAsync();
             return Ok(list);
+        }
+
+        [HttpPost("{id:long}/submit")]
+        [Authorize]
+        public async Task<IActionResult> Submit(long id, [FromBody] SubmitQuizDto submission)
+        {
+            var userId = long.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            var res = await _quizService.SubmitQuizAsync(id, userId, submission);
+            return Ok(res);
         }
 
     }

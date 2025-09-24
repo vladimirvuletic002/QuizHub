@@ -41,7 +41,7 @@
 .attempts-thead,
 .attempts-row {
   display: grid;
-  grid-template-columns: 1.4fr 2fr 1.2fr 1fr 1.2fr;
+  grid-template-columns: 1.4fr 2fr 1.2fr 1fr 1.2fr 1fr;
   gap: 10px;
   align-items: center;
 }

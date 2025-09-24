@@ -35,7 +35,7 @@ function App() {
           <Route path="/QuizManager/CreateQuiz" element={<CreateQuizPage/>} />
           <Route path="/QuizManager/:id/EditQuiz/" element={<EditQuizPage/>} />
           <Route path="/QuizManager/:id/QuizSolving/" element={<QuizSolvingPage/>} />
-          <Route path="/MyAttempts" element={<MyAttemptsPage/>} />
+          <Route path="/AttemptsHistory" element={<MyAttemptsPage/>} />
 
         </Routes>
       </Router>

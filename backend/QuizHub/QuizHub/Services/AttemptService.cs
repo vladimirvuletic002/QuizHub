@@ -109,5 +109,35 @@ namespace QuizHub.Services
             return dto;
 
         }
+		
+		public async Task<List<AttemptListItemDto>> GetAllAttemptsAsync()
+        {
+	            var list = await _db.QuizAttempts
+                .AsNoTracking()
+                .Include(a => a.Quiz).ThenInclude(q => q.Category)
+                .OrderByDescending(a => a.StartedAtUtc)
+                .Select(a => new AttemptListItemDto
+                {
+	                AttemptId = a.Id,
+					Username = a.User.Username,
+                    QuizId = a.QuizId,
+                    QuizTitle = a.Quiz.Title,
+                    CategoryName = a.Quiz.Category != null ? a.Quiz.Category.Name : string.Empty,
+                    StartedAtUtc = a.StartedAtUtc,
+                    CompletedAtUtc = a.CompletedAtUtc,
+                    DurationSeconds = a.CompletedAtUtc.HasValue
+                        ? (int)Math.Max(0, (a.CompletedAtUtc.Value - a.StartedAtUtc).TotalSeconds)
+                        : 0,
+                    Score = a.Score,
+                    MaxScore = a.MaxScore,
+                    Percentage = a.MaxScore > 0 ? (a.Score * 100.0 / a.MaxScore) : 0.0
+                })
+                .ToListAsync();
+
+            return list;
+        }
+           
+	
+
     }
 }

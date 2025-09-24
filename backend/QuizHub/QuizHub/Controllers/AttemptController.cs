@@ -40,5 +40,18 @@ namespace QuizHub.Controllers
 			return Ok(details);
 			
 		}
+
+		[HttpGet("attempts-history")]
+        public async Task<IActionResult> AllAttempts()
+        {
+	        var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userIdStr) || !long.TryParse(userIdStr, out var userId))
+                return Unauthorized();
+
+            var list = await _service.GetAllAttemptsAsync();
+            return Ok(list);
+        }
+        		
+
     }
 }

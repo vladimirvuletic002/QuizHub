@@ -6,5 +6,6 @@ namespace QuizHub.Interfaces
     {
         Task<List<AttemptListItemDto>> GetMyAttemptsAsync(long userId);
 		Task<AttemptDetailsDto> GetAttemptDetails(long attId, long userId);
+		Task<List<AttemptListItemDto>> GetAllAttemptsAsync();
     }
 }

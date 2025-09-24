@@ -20,3 +20,8 @@ export const GetDetails = async (id) =>
 {
   return await axios.get(`${process.env.REACT_APP_API_URL}/api/Attempt/${id}`, { headers: { ...authHeaders() }})
 }
+
+export const GetAllAttempts = async () =>
+{
+    return await axios.get(`${process.env.REACT_APP_API_URL}/api/Attempt/attempts-history`, { headers: { ...authHeaders() }});
+}

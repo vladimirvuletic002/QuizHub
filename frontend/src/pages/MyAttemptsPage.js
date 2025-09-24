@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from "react";
-import { GetMyAttempts as GetMyAttemptsService } from "../services/AttemptService";
+import { GetMyAttempts as GetMyAttemptsService, GetAllAttempts as GetAllAttemptsService } from "../services/AttemptService";
 import { useAuth } from "../context/AuthContext";
 import AttemptDetailsPanel from "../components/AttemptDetailsPanel";
 import "../styles/MyAttemptsPage.css";
@@ -20,7 +20,7 @@ function formatDuration(sec) {
   return `${m}:${r.toString().padStart(2, "0")}`;
 }
 
-export default function MyAttemptsPage({ getFn = GetMyAttemptsService }) {
+export default function MyAttemptsPage({ getFn = GetMyAttemptsService, getAllFn = GetAllAttemptsService }) {
   const { auth } = useAuth();
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -28,12 +28,22 @@ export default function MyAttemptsPage({ getFn = GetMyAttemptsService }) {
 
   const isLogged = useMemo(() => !!auth, [auth]);
 
+  // sigurnosna zastita i na UI
+    const isAdmin = useMemo(() => {
+      const role = (auth?.Role || auth?.role || "").toString().toLowerCase();
+      const userType = auth?.UserType ?? auth?.userType;
+      return role === "administrator" || userType === 0;
+    }, [auth]);
+
   useEffect(() => {
     if (!isLogged) return;
+
     const load = async () => {
       try {
         setLoading(true);
-        const { data } = await getFn();
+        // biramo servis prema ulozi
+        const svc = isAdmin ? getAllFn : getFn;
+        const { data } = await svc();
         const list = Array.isArray(data) ? data : [];
         setRows(list);
       } catch (e) {
@@ -46,8 +56,9 @@ export default function MyAttemptsPage({ getFn = GetMyAttemptsService }) {
         setLoading(false);
       }
     };
+
     load();
-  }, [isLogged, getFn]);
+  }, [isLogged, isAdmin, getFn, getAllFn]);
 
   if (!isLogged) {
     return (
@@ -60,10 +71,12 @@ export default function MyAttemptsPage({ getFn = GetMyAttemptsService }) {
     );
   }
 
+
+
   return (
     <div className="attempts-wrap">
       <div className="attempts-header">
-        <h1>Moji rezultati</h1>
+        <h1>{isAdmin ? "Svi pokušaji" : "Moji rezultati"}</h1>
       </div>
 
       {err && <div className="attempts-error">{err}</div>}
@@ -75,6 +88,7 @@ export default function MyAttemptsPage({ getFn = GetMyAttemptsService }) {
       ) : (
         <div className="attempts-table">
           <div className="attempts-thead">
+            {isAdmin && <div>Korisnik</div>}
             <div>Datum</div>
             <div>Naslov kviza</div>
             <div>Kategorija</div>
@@ -84,6 +98,7 @@ export default function MyAttemptsPage({ getFn = GetMyAttemptsService }) {
 
           {rows.map((a) => (
             <div key={a.attemptId} className="attempts-row">
+              {isAdmin && <div>{a.username}</div>}
               <div>{formatDate(a.completedAtUtc ?? a.startedAtUtc)}</div>
               <div className="attempts-title">{a.quizTitle}</div>
               <div>{a.categoryName}</div>
@@ -92,9 +107,12 @@ export default function MyAttemptsPage({ getFn = GetMyAttemptsService }) {
                 {a.score} / {a.maxScore} ({Math.round(a.percentage)}%)
               </div>
 
-              <div style={{ gridColumn: "1 / -1", marginTop: 6 }}>
-                <AttemptDetailsPanel attemptId={a.attemptId} />
-              </div>
+              {!isAdmin && 
+                <div style={{ gridColumn: "1 / -1", marginTop: 6 }}>
+                  <AttemptDetailsPanel attemptId={a.attemptId} />
+                </div>
+              }
+              
             </div>
           ))}
         </div>

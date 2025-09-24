@@ -123,10 +123,10 @@ const Navbar = () => {
               
 
               {!isAdmin ? (
-                  <><DropItem to="/QuizManager">Moji Kvizovi</DropItem><DropItem to="/MyAttempts">Moji Rezultati</DropItem></>
+                  <><DropItem to="/QuizManager">Moji Kvizovi</DropItem><DropItem to="/AttemptsHistory">Moji Rezultati</DropItem></>
               ) : (
 
-                  <><DropItem to="/QuizManager">Kvizovi</DropItem><DropItem to="/attempt-history">Evidencija</DropItem></>
+                  <><DropItem to="/QuizManager">Kvizovi</DropItem><DropItem to="/AttemptsHistory">Evidencija</DropItem></>
               )}
 
               <DropButton as={Link} to="/"
@@ -154,10 +154,10 @@ const Navbar = () => {
             <>
 
               {!isAdmin ? (
-                  <><MobileLink to="/QuizManager">Moji Kvizovi</MobileLink><MobileLink to="/MyAttempts">Moji Rezultati</MobileLink></>
+                  <><MobileLink to="/QuizManager">Moji Kvizovi</MobileLink><MobileLink to="/AttemptsHistory">Moji Rezultati</MobileLink></>
               ) : (
 
-                  <><MobileLink to="/QuizManager">Kvizovi</MobileLink><MobileLink to="/attempt-history">Evidencija</MobileLink></>
+                  <><MobileLink to="/QuizManager">Kvizovi</MobileLink><MobileLink to="/AttemptsHistory">Evidencija</MobileLink></>
               )}
               
 

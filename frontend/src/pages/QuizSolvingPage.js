@@ -4,6 +4,7 @@ import {
   GetQuizById as GetQuizByIdService,
   SubmitQuiz as SubmitQuizService,
 } from "../services/QuizService";
+import { useAuth } from "../context/AuthContext";
 import QuestionShow from "../components/QuestionShow";
 import "../styles/QuizSolvePage.css";
 
@@ -99,6 +100,7 @@ export default function QuizSolvingPage({
   const { id } = useParams();
   const quizIdNum = Number(id);
   const navigate = useNavigate();
+  const { auth } = useAuth();
 
   const [quiz, setQuiz] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -112,8 +114,16 @@ export default function QuizSolvingPage({
   const submittingRef = useRef(false);
   const finishedRef = useRef(false);
 
+  const isAdmin = useMemo(() => {
+      const role = (auth?.Role || auth?.role || "").toString().toLowerCase();
+      const userType = auth?.UserType ?? auth?.userType;
+      return role === "administrator" || userType === 0;
+    }, [auth]);
+
+
   // load quiz
   useEffect(() => {
+    if (!auth) return;
     const load = async () => {
       try {
         setLoading(true);
@@ -251,6 +261,18 @@ export default function QuizSolvingPage({
     () => (quiz ? quiz.Questions[idx] : null),
     [quiz, idx]
   );
+
+  if (isAdmin) {
+    return (
+      <div className="adminqz-wrap">
+        <div className="adminqz-card">
+          <h2>Pristup odbijen</h2>
+          <p>Ova stranica je dostupna samo korisnicima.</p>
+          <button onClick={() => navigate("/")}>Nazad na početnu</button>
+        </div>
+      </div>
+    );
+  }
 
   // set answer
   // Single: value = optionId (number)

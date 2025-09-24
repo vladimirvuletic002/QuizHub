@@ -84,23 +84,23 @@ export default function AdminQuizEditPage({
   }, [meta]);
 
   // sigurnosna zastita i na UI
-      const isAdmin = useMemo(() => {
-        const role = (auth?.Role || auth?.role || "").toString().toLowerCase();
-        const userType = auth?.UserType ?? auth?.userType;
-        return role === "administrator" || userType === 0;
-      }, [auth]);
-  
-      if (!isAdmin) {
-      return (
-        <div className="adminqz-wrap">
-          <div className="adminqz-card">
-            <h2>Pristup odbijen</h2>
-            <p>Ova stranica je dostupna samo administratorima.</p>
-            <button onClick={() => navigate("/")}>Nazad na početnu</button>
-          </div>
+  const isAdmin = useMemo(() => {
+    const role = (auth?.Role || auth?.role || "").toString().toLowerCase();
+    const userType = auth?.UserType ?? auth?.userType;
+    return role === "administrator" || userType === 0;
+  }, [auth]);
+
+  if (!isAdmin) {
+    return (
+      <div className="adminqz-wrap">
+        <div className="adminqz-card">
+          <h2>Pristup odbijen</h2>
+          <p>Ova stranica je dostupna samo administratorima.</p>
+          <button onClick={() => navigate("/")}>Nazad na početnu</button>
         </div>
-      );
-    }
+      </div>
+    );
+  }
 
   const removeQuestion = (idx) => {
     setQuestions((list) => {

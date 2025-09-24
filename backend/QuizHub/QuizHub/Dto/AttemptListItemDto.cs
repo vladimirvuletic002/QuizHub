@@ -3,6 +3,7 @@
     public class AttemptListItemDto
     {
         public long AttemptId { get; set; }
+		public string? Username { get; set; }
         public long QuizId { get; set; }
         public string QuizTitle { get; set; } = string.Empty;
         public string CategoryName { get; set; } = string.Empty;

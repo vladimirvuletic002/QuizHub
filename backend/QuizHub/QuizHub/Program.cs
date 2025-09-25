@@ -79,6 +79,8 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IQuizService, QuizService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IAttemptService, AttemptService>();
+builder.Services.AddScoped<ILeaderboardService, LeaderboardService>();
+builder.Services.AddScoped<ILeaderboardReadService, LeaderboardReadService>();
 
 var app = builder.Build();
 app.UseCors("_cors");

@@ -13,7 +13,8 @@ namespace QuizHub.Services
     {
         private readonly QuizDbContext _db;
         private readonly IMapper _mapper;
-        public QuizService(QuizDbContext db, IMapper mapper) { _db = db; _mapper = mapper; }
+        private readonly ILeaderboardService _leaderboard;
+        public QuizService(QuizDbContext db, IMapper mapper, ILeaderboardService leaderboard) { _db = db; _mapper = mapper; _leaderboard = leaderboard; }
 
         public async Task<long> CreateQuizAsync(CreateQuizDto dto, long createdByUserId)
         {
@@ -281,7 +282,12 @@ namespace QuizHub.Services
 
         public async Task<List<QuizDto>> GetQuizzes()
         {
-            return _mapper.Map<List<QuizDto>>(_db.Quizzes.ToList());
+            var entities = await _db.Quizzes
+                .Include(q => q.Category)
+                .Include(q => q.Questions)
+                .ToListAsync();
+
+            return _mapper.Map<List<QuizDto>>(entities);
         }
 
         public async Task<QuizSubmitResultDto> SubmitQuizAsync(long quizId, long userId, SubmitQuizDto submission)
@@ -442,6 +448,18 @@ namespace QuizHub.Services
             // 3) Snimi u bazu
             _db.QuizAttempts.Add(attempt);
             await _db.SaveChangesAsync();
+
+            await _leaderboard.InsertFirstAttemptOnlyAsync(
+                quiz.Id,
+                userId,
+                totalScore,
+                maxScore,
+                durationSeconds: attempt.CompletedAtUtc.HasValue
+                    ? (int?)Math.Max(0, (attempt.CompletedAtUtc.Value - attempt.StartedAtUtc).TotalSeconds)
+                    : null,
+                attemptId: attempt.Id,
+                completedAtUtc: attempt.CompletedAtUtc ?? DateTime.UtcNow
+            );
 
             return new QuizSubmitResultDto
             {

@@ -1,0 +1,51 @@
+.lb-wrap {
+  max-width: 1000px;
+  margin: 24px auto;
+  padding: 0 16px;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+
+.lb-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.lb-sub { color: #666; margin-top: 4px; }
+.lb-quiz-title { font-weight: 600; }
+.lb-category { margin-left: 8px; }
+
+.lb-actions { display: flex; gap: 8px; }
+.lb-ghost, .lb-primary {
+  border: none; border-radius: 8px; padding: 8px 12px; cursor: pointer;
+}
+.lb-ghost { background: #eee; }
+.lb-primary { background: #124eb6; color: #fff; }
+
+.lb-error { color: #b00020; background: #ffe7ea; padding: 10px; border-radius: 8px; }
+.lb-loading, .lb-empty { padding: 16px; color: #555; }
+
+.lb-table { display: grid; gap: 6px; }
+.lb-thead, .lb-row {
+  display: grid;
+  grid-template-columns: 60px 1fr 140px 120px 120px 200px;
+  gap: 8px;
+  align-items: center;
+}
+.lb-thead { font-weight: 700; color: #333; border-bottom: 1px solid #ddd; padding-bottom: 8px; }
+.lb-row { padding: 8px 10px; border-bottom: 1px dashed #eee; }
+
+.lb-rank { font-weight: 700; }
+.lb-score, .lb-pct, .lb-time, .lb-date { color: #333; }
+.lb-user { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.lb-row.me {
+  background: rgba(18, 78, 182, 0.539);
+  outline: 2px solid rgba(18, 78, 182, 0.35);
+  border-radius: 10px;
+}
+.lb-user { display:flex; align-items:center; gap:8px; }
+.lb-badge-me {
+  font-size: 12px; line-height: 1; padding: 3px 6px;
+  border-radius: 999px; background: #124eb6; color: #fff; font-weight: 600; text-transform: uppercase;
+}

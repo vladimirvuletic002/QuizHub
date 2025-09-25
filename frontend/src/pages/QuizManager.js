@@ -69,7 +69,6 @@ export default function QuizManager({
     };
   }, [getCatsFn]);
 
-
   // debounce za keyword
   useEffect(() => {
     const t = setTimeout(() => setDebouncedKeyWord(keyWord.trim()), 400);
@@ -87,7 +86,7 @@ export default function QuizManager({
         const { data } = await searchFn({
           categoryId: categoryId ? Number(categoryId) : undefined,
           keyWord: debouncedKeyWord || undefined,
-          difficulty : difficulty !== "" ? Number(difficulty) : undefined,
+          difficulty: difficulty !== "" ? Number(difficulty) : undefined,
           page,
           pageSize,
         });
@@ -112,8 +111,15 @@ export default function QuizManager({
     return () => {
       active = false;
     };
-  }, [auth, searchFn, categoryId, debouncedKeyWord, difficulty, page, pageSize]);
-
+  }, [
+    auth,
+    searchFn,
+    categoryId,
+    debouncedKeyWord,
+    difficulty,
+    page,
+    pageSize,
+  ]);
 
   const onDelete = async (id, title) => {
     const yes = window.confirm(
@@ -225,7 +231,7 @@ export default function QuizManager({
                 <div>{formatSeconds(q.timeLimitSeconds)}</div>
                 <div className="adminqz-actions">
                   {!isAdmin ? (
-                    <button
+                    <><button
                       className="adminqz-take-quiz"
                       onClick={() =>
                         navigate(`/QuizManager/${q.id}/QuizSolving`)
@@ -233,7 +239,14 @@ export default function QuizManager({
                     >
                       {" "}
                       Reši Kviz
-                    </button>
+                    </button> 
+
+                    <button
+                    className="adminqz-ranking"
+                    onClick={() => navigate(`/QuizManager/${q.id}/Leaderboard`)}
+                  >
+                    Rang lista
+                  </button> </>
                   ) : (
                     <>
                       <button
@@ -252,6 +265,7 @@ export default function QuizManager({
                       </button>
                     </>
                   )}
+                  
                 </div>
               </div>
             ))

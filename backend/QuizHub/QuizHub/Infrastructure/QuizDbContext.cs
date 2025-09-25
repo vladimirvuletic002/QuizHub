@@ -18,6 +18,8 @@ namespace QuizHub.Infrastructure
         public DbSet<QuizAttempt> QuizAttempts { get; set; }
         public DbSet<AttemptAnswer> AttemptAnswers { get; set; }
         public DbSet<AttemptAnswerOption> AttemptAnswerOptions { get; set; } 
+        public DbSet<QuizLeaderboard> QuizLeaderboards { get; set; }
+
         public QuizDbContext(DbContextOptions<QuizDbContext> options) : base(options)
         {
         }

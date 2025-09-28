@@ -57,7 +57,7 @@ namespace QuizHub.Controllers
         }
 
         // DELETE — admin
-        [HttpDelete("{id:long}/delete")]
+        [HttpDelete("{id:long}")]
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(long id)
         {

@@ -95,7 +95,7 @@ export default function LiveRoomCreatePage({
           </div>
 
           <div className="form-row">
-            <label>Reveal (sekunde)</label>
+            <label>Prelaz (sekunde)</label>
             <input
               type="number"
               min="1"

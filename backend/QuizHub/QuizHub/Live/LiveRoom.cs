@@ -23,7 +23,7 @@ namespace QuizHub.Live
 
         public CancellationTokenSource? TickCts { get; set; }
 
-        public ConcurrentDictionary<long, long> SpeedTieMs { get; } = new();              // zbir vremena za TACHNE odgovore (ms, manje je bolje)
+        public ConcurrentDictionary<long, long> SpeedTieMs { get; } = new();              // zbir vremena za tacne odgovore
         public ConcurrentDictionary<long, DateTimeOffset> LastAnswerAt { get; } = new();  // sekundarni tie-break
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using QuizHub.Dto.Question;
 using QuizHub.Dto.Quiz;
@@ -32,7 +33,7 @@ namespace QuizHub.Services
                 TimeLimitSeconds = dto.TimeLimitSeconds
             };
 
-            foreach (var q in dto.Questions.OrderBy(x => x.Order))
+            /*foreach (var q in dto.Questions.OrderBy(x => x.Order))
             {
                 var question = new Question
                 {
@@ -72,22 +73,33 @@ namespace QuizHub.Services
                 }
 
                 quiz.Questions.Add(question);
+            } */
+
+            foreach (var q in dto.Questions)
+            {
+                if (q.Type != QuestionType.TextInput && (q.Options == null || q.Options.Count == 0))
+                    throw new InvalidOperationException("Options are required for non-text questions.");
             }
 
-            quiz.QuestionCount = quiz.Questions.Count;
+            var entity = _mapper.Map<Quiz>(dto);               
+            entity.QuestionCount = entity.Questions.Count;
 
-            _db.Quizzes.Add(quiz);
+            //quiz.QuestionCount = quiz.Questions.Count;
+
+            _db.Quizzes.Add(entity);
             await _db.SaveChangesAsync();
-            return quiz.Id;
+            return entity.Id;
         }
 
         public async Task<QuizDetailsDto?> GetQuizByIdAsync(long id)
         {
-            var quiz = await _db.Quizzes
+            /*(var quiz = await _db.Quizzes
                 .Include(q => q.Category)
                 .Include(q => q.Questions).ThenInclude(qq => qq.Options)
                 .Include(q => q.Questions).ThenInclude(qq => qq.AcceptableAnswers)
                 .FirstOrDefaultAsync(q => q.Id == id);
+
+
 
             if (quiz == null) return null;
 
@@ -122,7 +134,25 @@ namespace QuizHub.Services
                             ? x.AcceptableAnswers.Select(a => a.AnswerText).ToList()
                             : null
                     }).ToList()
-            };
+            };  */
+
+            var quiz = await _db.Quizzes
+                .AsNoTracking()
+                .Include(q => q.Category)
+                .Include(q => q.Questions).ThenInclude(qq => qq.Options)
+                .Include(q => q.Questions).ThenInclude(qq => qq.AcceptableAnswers)
+                .FirstOrDefaultAsync(q => q.Id == id);
+
+            if (quiz == null) return null;
+
+            // Mapiranje u memoriji (bez EF-projekcije)
+            var dto = _mapper.Map<QuizDetailsDto>(quiz);
+
+            // Ako ti je bitan redosled pitanja, ovde ga garantuj:
+            dto.Questions = dto.Questions.OrderBy(x => x.Order).ToList();
+
+
+            return dto;
         }
 
 
@@ -145,6 +175,9 @@ namespace QuizHub.Services
 
             if (quiz == null) return false;
 
+            // 1) mapiraj META polja (Title/Description/Category/Difficulty/TimeLimitSeconds)
+            _mapper.Map(dto, quiz);
+
             // meta
             quiz.Title = dto.Title;
             quiz.Description = dto.Description;
@@ -152,16 +185,30 @@ namespace QuizHub.Services
             quiz.Difficulty = dto.Difficulty;
             quiz.TimeLimitSeconds = dto.TimeLimitSeconds;
 
-            // jednostavan pristup: obriši postojeća pitanja pa upiši nova iz DTO
-            _db.QuestionAcceptableAnswers.RemoveRange(quiz.Questions.SelectMany(x => x.AcceptableAnswers));
-            _db.QuestionOptions.RemoveRange(quiz.Questions.SelectMany(x => x.Options));
-            _db.Questions.RemoveRange(quiz.Questions);
+            // 2) da li postoje pokušaji za ovaj kviz
+            var hasAttempts =
+                await _db.AttemptAnswers.AnyAsync(a => a.Question.QuizId == id)
+                || await _db.AttemptAnswerOptions.AnyAsync(ao => ao.QuestionOption.Question.QuizId == id);
+
+            if (hasAttempts)
+            {
+                // BEZ destruktivnih izmena — sačuvaj samo meta
+                await _db.SaveChangesAsync();
+                return true;
+            }
+
+            // 3) nema pokušaja → možeš primeniti "delete and recreate"
+            _db.QuestionAcceptableAnswers.RemoveRange(quiz.Questions.SelectMany(x => x.AcceptableAnswers).ToList());
+            _db.QuestionOptions.RemoveRange(quiz.Questions.SelectMany(x => x.Options).ToList());
+            _db.Questions.RemoveRange(quiz.Questions.ToList());
 
             quiz.Questions.Clear();
 
-            foreach (var q in dto.Questions.OrderBy(x => x.Order))
+            await _db.SaveChangesAsync();
+
+            foreach (var qDto in dto.Questions.OrderBy(x => x.Order))
             {
-                var question = new Question
+                /*var question = new Question
                 {
                     Text = q.Text,
                     Type = q.Type,
@@ -191,9 +238,15 @@ namespace QuizHub.Services
                             IsCorrect = opt.IsCorrect
                         });
                     }
-                }
+                } */
 
+                // dodatna validacija
+                if (qDto.Type != QuestionType.TextInput && (qDto.Options == null || qDto.Options.Count == 0))
+                    throw new InvalidOperationException("Options are required for non-text questions.");
+
+                var question = _mapper.Map<Question>(qDto); // CreateMap<CreateQuestionDto, Question>
                 quiz.Questions.Add(question);
+
             }
 
             quiz.QuestionCount = quiz.Questions.Count;
@@ -204,9 +257,9 @@ namespace QuizHub.Services
 
         public async Task<PagedResult<QuizListItemDto>> SearchAsync(QuizQuery query)
         {
-            var q = _db.Quizzes
-                .Include(x => x.Category)
-                .AsQueryable();
+            var q = _db.Quizzes.AsNoTracking();
+                //.Include(x => x.Category)
+                //.AsQueryable();
 
             if (query.CategoryId.HasValue)
                 q = q.Where(x => x.CategoryId == query.CategoryId.Value);
@@ -229,7 +282,8 @@ namespace QuizHub.Services
                 .OrderBy(x => x.Title)
                 .Skip((page - 1) * size)
                 .Take(size)
-                .Select(x => new QuizListItemDto
+                .ProjectTo<QuizListItemDto>(_mapper.ConfigurationProvider)
+                /*.Select(x => new QuizListItemDto
                 {
                     Id = x.Id,
                     Title = x.Title,
@@ -237,8 +291,8 @@ namespace QuizHub.Services
                     Difficulty = x.Difficulty,
                     QuestionCount = x.QuestionCount,
                     TimeLimitSeconds = x.TimeLimitSeconds
-                })
-                .ToListAsync();
+                })*/
+                .ToListAsync(); 
 
             return new PagedResult<QuizListItemDto>
             {
@@ -251,7 +305,7 @@ namespace QuizHub.Services
 
         public async Task<PagedResult<QuizListItemDto>> GetAllQuizzesAsync()
         {
-            var q = _db.Quizzes.Include(x => x.Category).AsQueryable();
+            var q = _db.Quizzes.AsNoTracking(); //Include(x => x.Category).AsQueryable();
 
             var total = await q.CountAsync();
             var page = Math.Max(1, 1);
@@ -261,14 +315,15 @@ namespace QuizHub.Services
                 .OrderBy(x => x.Title)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
-                .Select(x => new QuizListItemDto
+                .ProjectTo<QuizListItemDto>(_mapper.ConfigurationProvider)
+                /*.Select(x => new QuizListItemDto
                 {
                     Id = x.Id,
                     Title = x.Title,
                     CategoryName = x.Category != null ? x.Category.Name : string.Empty,
                     Difficulty = x.Difficulty,
                     TimeLimitSeconds = x.TimeLimitSeconds
-                })
+                }) */
                 .ToListAsync();
 
             return new PagedResult<QuizListItemDto>

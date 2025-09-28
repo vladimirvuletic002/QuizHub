@@ -90,6 +90,7 @@ builder.Services
             ValidateIssuer = true,
             ValidateAudience = true,
             ValidateIssuerSigningKey = true,
+            ValidateLifetime = true, // rok trajanja tokena
             ValidIssuer = jwtIssuer,
             ValidAudience = jwtAudience,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey!)),

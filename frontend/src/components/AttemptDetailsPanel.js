@@ -1,12 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { GetDetails as GetDetailsService } from "../services/AttemptService";
+import ProgressChart from "./ProgressChart";
 import "../styles/AttemptDetailsPanel.css";
 
 const QT = { SingleChoice: 0, MultipleChoice: 1, TrueFalse: 2, TextInput: 3 };
 
-function pct(score, max) {
-  return max > 0 ? (score * 100) / max : 0;
-}
 
 function userAnswerLabels(q, selIds, textAns) {
   if (q.Type === QT.TextInput) return [(textAns ?? "").toString() || "(bez odgovora)"];
@@ -21,33 +19,6 @@ function correctAnswerLabels(q) {
     return (q.Options ?? []).filter(o => o.IsCorrect).map(o => o.Text);
   }
   return [];
-}
-
-function Sparkline({ points, width=420, height=64, pad=8 }) {
-  // points: [{score, max, whenUtc}]
-  const vals = points.map(p => pct(p.score, p.max));
-  if (vals.length === 0) return null;
-  const min = 0, max = 100;
-  const n = vals.length;
-  const w = width - pad*2, h = height - pad*2;
-
-  const xs = vals.map((_, i) => (i/(Math.max(1, n-1))) * w + pad);
-  const ys = vals.map(v => (1 - (v - min)/(max - min)) * h + pad);
-  const d = xs.map((x,i) => `${i===0?"M":"L"} ${x.toFixed(1)} ${ys[i].toFixed(1)}`).join(" ");
-
-  const last = vals[vals.length-1];
-  return (
-    <svg width={width} height={height} role="img" aria-label="Progres rezultata">
-      <polyline fill="none" stroke="currentColor" strokeWidth="2" points={
-        xs.map((x,i)=>`${x},${ys[i]}`).join(" ")
-      } />
-      <path d={d} fill="none" stroke="#4f46e5" strokeWidth="2" />
-      <circle cx={xs[n-1]} cy={ys[n-1]} r="3" fill="#4f46e5" />
-      <text x={width - pad} y={pad+12} textAnchor="end" fontSize="12" fill="#111">
-        {Math.round(last)}%
-      </text>
-    </svg>
-  );
 }
 
 export default function AttemptDetailsPanel({
@@ -98,7 +69,7 @@ export default function AttemptDetailsPanel({
 
               {progress.length > 0 && (
                 <div className="adp-chart">
-                  <Sparkline points={progress} />
+                  <ProgressChart points={progress} />
                 </div>
               )}
 

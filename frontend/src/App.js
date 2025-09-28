@@ -19,6 +19,9 @@ import EditQuizPage from "./pages/QuizEditPage";
 import QuizSolvingPage from "./pages/QuizSolvingPage";
 import MyAttemptsPage from "./pages/MyAttemptsPage";
 import QuizLeaderboardPage from "./pages/QuizLeaderboardPage";
+import LiveRoomPage from "./pages/LiveRoomPage";
+import LiveRoomCreatePage from "./pages/LiveRoomCreatePage";
+import LiveRoomJoinPage from "./pages/LiveRoomJoinPage";
 import { AuthProvider } from "./context/AuthContext";
 
 function App() {
@@ -38,6 +41,9 @@ function App() {
           <Route path="/QuizManager/:id/QuizSolving/" element={<QuizSolvingPage/>} />
           <Route path="/AttemptsHistory" element={<MyAttemptsPage/>} />
           <Route path="/QuizManager/:id/Leaderboard" element={<QuizLeaderboardPage />} />
+          <Route path="/Live/Rooms/Create" element={<LiveRoomCreatePage />} />
+          <Route path="/Live/Rooms/Join" element={<LiveRoomJoinPage />} />
+          <Route path="/Live/Room/:roomCode" element={<LiveRoomPage />} />
 
         </Routes>
       </Router>

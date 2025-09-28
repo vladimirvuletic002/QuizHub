@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using QuizHub.Dto;
+using QuizHub.Dto.Question;
+using QuizHub.Dto.Quiz;
 using QuizHub.Infrastructure;
 using QuizHub.Interfaces;
 using QuizHub.Models;

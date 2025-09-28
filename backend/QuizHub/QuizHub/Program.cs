@@ -2,12 +2,14 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using QuizHub.Infrastructure;
 using QuizHub.Interfaces;
+using QuizHub.Live;
+using QuizHub.Mapping;
 using QuizHub.Options;
 using QuizHub.Services;
 using System.Text;
-using QuizHub.Mapping;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +27,32 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "QuizHub API", Version = "v1" });
+
+    // JWT bearer schema
+    var jwtScheme = new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Description = "Unesi: Bearer {tvoj_jwt_token}",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        Reference = new OpenApiReference
+        {
+            Type = ReferenceType.SecurityScheme,
+            Id = "Bearer"
+        }
+    };
+
+    c.AddSecurityDefinition("Bearer", jwtScheme);
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        { jwtScheme, Array.Empty<string>() }
+    });
+});
 
 
 
@@ -68,6 +95,22 @@ builder.Services
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey!)),
             ClockSkew = TimeSpan.Zero
         };
+
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                var accessToken = context.Request.Query["access_token"];
+                var path = context.HttpContext.Request.Path;
+                if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs/room"))
+                {
+                    context.Token = accessToken;
+                }
+                return Task.CompletedTask;
+            }
+        };
+        options.RequireHttpsMetadata = true;
+
     });
 
 builder.Services.AddAuthorization();
@@ -82,7 +125,14 @@ builder.Services.AddScoped<IAttemptService, AttemptService>();
 builder.Services.AddScoped<ILeaderboardService, LeaderboardService>();
 builder.Services.AddScoped<ILeaderboardReadService, LeaderboardReadService>();
 
+builder.Services.AddSignalR();
+builder.Services.AddSingleton<IRoomRegistry, RoomRegistry>();
+builder.Services.AddScoped<IRoomManager, RoomManager>();
+
 var app = builder.Build();
+
+app.UseRouting();
+
 app.UseCors("_cors");
 
 // Configure the HTTP request pipeline.
@@ -98,6 +148,9 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
-app.MapControllers();
+app.MapControllers().RequireCors("_cors");
+app.MapHub<RoomHub>("/hubs/room").RequireCors("_cors"); // ruta za SignalR
+
+
 
 app.Run();

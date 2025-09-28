@@ -1,4 +1,4 @@
-﻿using QuizHub.Dto;
+﻿using QuizHub.Dto.Category;
 
 namespace QuizHub.Interfaces
 {

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.EntityFrameworkCore;
-using QuizHub.Dto;
+using QuizHub.Dto.Auth;
 using QuizHub.Infrastructure;
 using QuizHub.Interfaces;
 using QuizHub.Models;

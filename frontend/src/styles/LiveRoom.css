@@ -1,0 +1,34 @@
+.live-wrap { max-width: 1000px; margin: 24px auto; padding: 0 16px; }
+.live-topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+.live-actions { display:flex; gap:8px; }
+.live-primary { background:#124eb6; color:#fff; border:none; border-radius:8px; padding:10px 14px; cursor:pointer; }
+.live-ghost { background:transparent; border:1px solid #ccc; border-radius:8px; padding:10px 14px; cursor:pointer; }
+
+.live-grid { display:grid; grid-template-columns: 2fr 1fr; gap:16px; }
+@media (max-width: 800px) { .live-grid { grid-template-columns: 1fr; } }
+
+.live-card { background:#fff; border-radius:12px; box-shadow: 0 6px 16px rgba(0,0,0,.08); padding:16px; }
+.live-qhead { display:flex; gap:16px; align-items:center; justify-content:space-between; margin-bottom:8px; }
+.live-q { margin:12px 0 16px; }
+
+.live-options { display:grid; gap:8px; }
+.live-opt { display:flex; align-items:center; gap:8px; padding:10px; border:1px solid #ddd; border-radius:8px; cursor:pointer; margin-bottom: 8px;}
+.live-opt.active { border-color:#124eb6; background:#f0f5ff; }
+.live-input { width:100%; padding:10px; border:1px solid #ddd; border-radius:8px; margin-bottom: 8px;}
+
+.live-table { margin-top:8px; }
+.live-thead, .live-row { display:grid; grid-template-columns: 50px 1fr 120px; gap:12px; padding:8px 0; }
+.live-thead { font-weight:700; border-bottom:1px solid #eee; }
+.live-row { border-bottom:1px solid #f7f7f7; }
+.form-row { margin-bottom: 10px; }
+
+.live-board { margin-top: 12px; padding: 12px; border-radius: 12px; background: #f0f5ff; }
+.live-board-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+.live-board-meta { display:flex; gap:12px; align-items:center; }
+.state-badge { padding:2px 8px; border-radius:999px; font-size:12px; background:#a8ccff; }
+.state-question { background:#0b5; }
+.state-reveal { background:#e9b008; }
+.state-lobby { background:#d5d5d5; }
+.state-finished { background:#2c80ff; }
+.live-board-timer { font-variant-numeric: tabular-nums; }
+.live-timer-user { font-variant-numeric: tabular-nums; background-color: #6963d4ff; color: white; padding: 5px; border-radius: 4px;}

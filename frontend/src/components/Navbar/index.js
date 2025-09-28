@@ -123,10 +123,10 @@ const Navbar = () => {
               
 
               {!isAdmin ? (
-                  <><DropItem to="/QuizManager">Moji Kvizovi</DropItem><DropItem to="/AttemptsHistory">Moji Rezultati</DropItem></>
+                  <><DropItem to="/QuizManager">Moji Kvizovi</DropItem><DropItem to="/AttemptsHistory">Moji Rezultati</DropItem><DropItem to="/Live/Rooms/Join">Pridruži se sobi</DropItem></>
               ) : (
 
-                  <><DropItem to="/QuizManager">Kvizovi</DropItem><DropItem to="/AttemptsHistory">Evidencija</DropItem></>
+                  <><DropItem to="/QuizManager">Kvizovi</DropItem><DropItem to="/AttemptsHistory">Evidencija</DropItem><DropItem to="/Live/Rooms/Create">Kreiraj live sobu</DropItem></>
               )}
 
               <DropButton as={Link} to="/"
@@ -154,10 +154,10 @@ const Navbar = () => {
             <>
 
               {!isAdmin ? (
-                  <><MobileLink to="/QuizManager">Moji Kvizovi</MobileLink><MobileLink to="/AttemptsHistory">Moji Rezultati</MobileLink></>
+                  <><MobileLink to="/QuizManager">Moji Kvizovi</MobileLink><MobileLink to="/AttemptsHistory">Moji Rezultati</MobileLink><MobileLink to="/Live/Rooms/Join">Pridruži se sobi</MobileLink></>
               ) : (
 
-                  <><MobileLink to="/QuizManager">Kvizovi</MobileLink><MobileLink to="/AttemptsHistory">Evidencija</MobileLink></>
+                  <><MobileLink to="/QuizManager">Kvizovi</MobileLink><MobileLink to="/AttemptsHistory">Evidencija</MobileLink><MobileLink to="/Live/Rooms/Create">Kreiraj live sobu</MobileLink></>
               )}
               
 

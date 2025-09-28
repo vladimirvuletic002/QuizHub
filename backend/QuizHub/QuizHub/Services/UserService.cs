@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using QuizHub.Dto;
+using QuizHub.Dto.User;
 using QuizHub.Infrastructure;
 using QuizHub.Interfaces;
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using QuizHub.Dto;
+using QuizHub.Dto.Attempt;
+using QuizHub.Dto.Question;
 using QuizHub.Infrastructure;
 using QuizHub.Interfaces;
 using QuizHub.Models;

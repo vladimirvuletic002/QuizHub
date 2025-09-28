@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity.Data;
-using QuizHub.Dto;
+using QuizHub.Dto.Auth;
 using QuizHub.Models;
 
 namespace QuizHub.Interfaces

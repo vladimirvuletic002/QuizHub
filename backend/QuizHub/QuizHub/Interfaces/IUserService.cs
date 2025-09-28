@@ -1,4 +1,4 @@
-﻿using QuizHub.Dto;
+﻿using QuizHub.Dto.User;
 
 namespace QuizHub.Interfaces
 {

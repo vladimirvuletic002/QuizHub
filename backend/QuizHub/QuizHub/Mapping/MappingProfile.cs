@@ -1,5 +1,8 @@
 ﻿using AutoMapper;
-using QuizHub.Dto;
+using QuizHub.Dto.Auth;
+using QuizHub.Dto.Category;
+using QuizHub.Dto.Quiz;
+using QuizHub.Dto.User;
 using QuizHub.Models;
 
 namespace QuizHub.Mapping

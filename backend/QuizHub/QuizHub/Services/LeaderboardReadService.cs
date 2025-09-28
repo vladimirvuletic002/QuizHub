@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using QuizHub.Dto;
+using QuizHub.Dto.Leaderboard;
 using QuizHub.Infrastructure;
 using QuizHub.Interfaces;
 

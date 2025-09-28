@@ -267,7 +267,7 @@ export default function QuizSolvingPage({
       <div className="adminqz-wrap">
         <div className="adminqz-card">
           <h2>Pristup odbijen</h2>
-          <p>Ova stranica je dostupna samo korisnicima.</p>
+          <p>Ova stranica je dostupna samo igračima.</p>
           <button onClick={() => navigate("/")}>Nazad na početnu</button>
         </div>
       </div>

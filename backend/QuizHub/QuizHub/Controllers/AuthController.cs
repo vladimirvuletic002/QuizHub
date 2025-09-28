@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
-using QuizHub.Dto;
+using QuizHub.Dto.Auth;
 using QuizHub.Interfaces;
 
 namespace QuizHub.Controllers

@@ -16,6 +16,7 @@ namespace QuizHub.Live
         public async Task JoinRoom(string roomCode)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, roomCode);
+			Context.Items["roomCode"] = roomCode;
             var userId = long.Parse(Context.User!.FindFirstValue(ClaimTypes.NameIdentifier)!);
             var username = Context.User!.Identity!.Name ?? $"User{userId}";
             //await _rooms.AddParticipantAsync(roomCode, userId, username, isAdmin: false, connectionId: Context.ConnectionId);
@@ -45,7 +46,13 @@ namespace QuizHub.Live
 
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
-            // Opciono: ako čuvaš roomCode u Context.Items možeš čistiti
+            if (Context.Items.TryGetValue("roomCode", out var obj) && obj is string code)
+	        {
+		            await _rooms.RemoveConnectionAsync(code, Context.ConnectionId);
+	            await Groups.RemoveFromGroupAsync(Context.ConnectionId, code);
+	            await Clients.Group(code).SendAsync("ParticipantLeft", new { connectionId = Context.ConnectionId });
+	        }
+        
             await base.OnDisconnectedAsync(exception);
         }
 

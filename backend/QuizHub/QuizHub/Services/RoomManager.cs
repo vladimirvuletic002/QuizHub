@@ -64,10 +64,14 @@ namespace QuizHub.Services
             r.Scores.TryAdd(userId, 0);
 
             var lb = BuildLeaderboard(r);
-            await _hub.Clients.Client(connectionId).SendAsync("ScoresUpdated", new LeaderboardDto { Rows = lb });
+			var adminConnIds = r.Participants.Values
+			    .Where(p => p.IsAdmin && !string.IsNullOrEmpty(p.ConnectionId))
+			    .Select(p => p.ConnectionId!);
+			await _hub.Clients.Clients(adminConnIds).SendAsync("ScoresUpdated", new LeaderboardDto { Rows = lb });
+            //await _hub.Clients.Client(connectionId).SendAsync("ScoresUpdated", new LeaderboardDto { Rows = lb });
         }
 
-        public Task RemoveConnectionAsync(string roomCode, string connectionId)
+        public async Task RemoveConnectionAsync(string roomCode, string connectionId)
         {
             if (_registry.TryGet(roomCode, out var r) && r != null)
             {
@@ -80,8 +84,11 @@ namespace QuizHub.Services
                     }
                 }
             }
-            return Task.CompletedTask;
+            //return Task.CompletedTask;
+			var lb = BuildLeaderboard(r);
+        	await _hub.Clients.Group(roomCode).SendAsync("ScoresUpdated", new LeaderboardDto { Rows = lb });
         }
+
 
         public async Task StartQuizAsync(string roomCode, long adminUserId)
         {
@@ -152,7 +159,7 @@ namespace QuizHub.Services
 
         private List<ScoresRowDto> BuildLeaderboard(LiveRoom r) =>
             r.Scores
-             .Where(kv => r.Participants.TryGetValue(kv.Key, out var u) && !u.IsAdmin)
+             .Where(kv => r.Participants.TryGetValue(kv.Key, out var u) && !u.IsAdmin && !string.IsNullOrEmpty(u.ConnectionId))
              .OrderByDescending(kv => kv.Value)
              .ThenBy(kv =>                     // 2) manji zbir vremena za tacne odgovore
                 r.SpeedTieMs.TryGetValue(kv.Key, out var t) ? t : long.MaxValue)

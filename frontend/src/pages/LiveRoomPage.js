@@ -42,6 +42,9 @@ export default function LiveRoomPage() {
     // event handleri pre starta su ok
     setLiveHeader(roomCode);
     conn.on("ParticipantJoined", (p) => setJoined((prev) => [...prev, p]));
+    conn.on("ParticipantLeft", ({ connectionId }) => {
+      setJoined(prev => prev.filter(p => p.connectionId !== connectionId));
+    });
     conn.on("StateChanged", ({ state }) => setState(state));
     conn.on("ShowQuestion", (dto) => {
       setState("Question");
@@ -252,7 +255,7 @@ export default function LiveRoomPage() {
 
         {state === "Reveal" && (
           <div className="live-reveal">
-            Tačan odgovor prikazan. Sledeće pitanje uskoro…
+            Sledeće pitanje počinje uskoro… Pripremite se!
           </div>
         )}
 
